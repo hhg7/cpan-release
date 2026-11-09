@@ -1,0 +1,11 @@
+{
+  "name": "cpan-release",
+  "version": "0.1.0",
+  "description": "Triage CPAN Testers failures and prepare Perl distribution releases: what is really on CPAN, reproduce on a matching perl, fix with a regression test, verify on every local perl, bump $VERSION and write Changes. Never uploads.",
+  "author": {
+    "name": "David E. Condon"
+  },
+  "repository": "https://github.com/hhg7/cpan-release",
+  "license": "MIT",
+  "keywords": ["perl", "cpan", "cpantesters", "release", "xs"]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "cpan-release",
+  "owner": {
+    "name": "David E. Condon"
+  },
+  "description": "Claude Code tools for CPAN authors",
+  "plugins": [
+    {
+      "name": "cpan-release",
+      "source": "./",
+      "description": "Triage CPAN Testers failures and prepare Perl distribution releases, without ever uploading."
+    }
+  ]
+}
