@@ -4,17 +4,17 @@ A Claude Code plugin for CPAN authors. Its one skill, `cpan-release`, takes a
 failing CPAN Testers report (or just "check the matrix") and runs the whole
 cycle:
 
-1. It asks MetaCPAN what is really released, instead of guessing from local
+1. Ask MetaCPAN what is really released, instead of guessing from local
    tarballs or commit messages.
-2. It groups the failing reports by cause, and separates module bugs from test
+2. Groups the failing reports by cause, and separates module bugs from test
    bugs and from problems in the tester's own environment.
-3. It reproduces each failure on a local perl with the same build options
+3. Reproduces each failure on a local perl with the same build options
    (threads, 64-bit IV, long double, quadmath, 32-bit), or emulates it.
-4. It fixes the cause and adds a regression test that fails without the fix.
-5. It verifies the fix on every installed perl.
-6. It bumps `$VERSION` and writes the `Changes` entry in the distribution's own
+4. Fixes the cause and adds a regression test that fails without the fix.
+5. Verifies the fix on every installed perl.
+6. Bumps `$VERSION` and writes the `Changes` entry in the distribution's own
    format.
-7. It builds and checks the tarball, then stops. **It never uploads to PAUSE.**
+7. Builds and checks the tarball, then stops. **It never uploads to PAUSE.**
 
 It comes with `scripts/cpantesters.pl`, which lists a release's failing reports
 and prints their full text from the CPAN Testers JSON API. That API kept working
