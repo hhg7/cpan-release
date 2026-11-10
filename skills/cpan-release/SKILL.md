@@ -1,6 +1,6 @@
 ---
 name: cpan-release
-description: Triage CPAN Testers failures and prepare the next release of a Perl distribution. Use when the user pastes a CPAN Testers, smoker or magpie report; asks whether a release has failures ("check the matrix", "any bugs on cpantesters?"); or asks to bump $VERSION, write a Changes entry, or get a CPAN release ready. Covers working out what is really on CPAN, reproducing a failure on a matching perl, fixing it, verifying across every installed perl, and writing the version bump and release notes. It never uploads.
+description: Triage CPAN Testers and CPAN Testers Magpie failures and prepare the next release of a Perl distribution. Use when the user pastes a CPAN Testers, smoker or magpie report; asks whether a release has failures ("check the matrix", "any bugs on cpantesters?", "what do the magpie testers say?"); or asks to bump $VERSION, write a Changes entry, or get a CPAN release ready. Covers working out what is really on CPAN, reproducing a failure on a matching perl, fixing it, verifying across every installed perl, and writing the version bump and release notes. It never uploads.
 ---
 
 # CPAN release triage
@@ -24,7 +24,9 @@ upload, and upload versions whose commit says nothing. Ask MetaCPAN:
 perl <this skill's directory>/scripts/cpantesters.pl          # run from the dist root
 ```
 
-Its first line names the newest version on CPAN. Compare it with `$VERSION` in
+Its first line names the newest version on CPAN. The lines after it list that
+version's non-pass reports twice: once from CPAN Testers and once from CPAN
+Testers Magpie (see step 2). Compare it with `$VERSION` in
 the main module and with the newest heading in `Changes`:
 
 | `$VERSION` vs newest on CPAN | meaning |
@@ -48,6 +50,27 @@ perl <skill dir>/scripts/cpantesters.pl --report <guid>     # one report's full 
 
 These use the JSON APIs, which kept working while the CPAN Testers web pages
 returned 403. Exit status 1 means fail or unknown reports exist.
+
+**Two sources are asked, and both must be read.** The script lists the
+version's non-pass reports from the CPAN Testers API and then, under a line
+starting `Magpie`, from CPAN Testers Magpie (`https://magpie.cpantesters.org`).
+They aggregate the same reports, so the counts normally agree, but either can
+be down, slow or behind the other:
+
+- A report marked `[Magpie only]`, or a `note:` line saying a report is on CPAN
+  Testers and not on Magpie, is one that a single source would have missed.
+  Triage it like any other, and say which source held it.
+- If the two totals differ, report both numbers. Do not call a release clean on
+  the strength of the source that shows fewer failures.
+- If one source did not answer, the script says so on STDERR and goes on with
+  the other. Say in the reply which source was not checked. A release is
+  "clean" only as far as the sources that answered. Exit status 2 means neither
+  answered.
+- `--report <guid>` reads the text from CPAN Testers and falls back to Magpie
+  when CPAN Testers cannot serve it. `--no-magpie` asks CPAN Testers only; use
+  it only when Magpie itself is what is failing.
+- When the user asks about "the matrix", "cpantesters" or "magpie testers",
+  the answer covers both sources, each named.
 
 For each failing report, record the perl version, `osname` and archname, and
 read the archname's tokens: `thread`/`multi` (ithreads), `64int` (64-bit IV on a
@@ -153,6 +176,8 @@ prevented it. Add the rule if the maintainer agrees.
 ## Report back
 
 End with a table of each cause, the reports it covers, its kind, whether you
-reproduced it and on which perl, and its status. Below the table, give the
+reproduced it and on which perl, and its status. State the report counts from
+CPAN Testers and from Magpie separately, and name any source that did not
+answer. Below the table, give the
 version and `Changes` entry you wrote or propose, and the exact command the
 maintainer runs to upload.
